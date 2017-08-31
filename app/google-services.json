@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "240083360613",
+    "firebase_url": "https://vxyproject-3db14.firebaseio.com",
+    "project_id": "vxyproject-3db14",
+    "storage_bucket": "vxyproject-3db14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240083360613:android:c20e1f827d3e1c88",
+        "android_client_info": {
+          "package_name": "com.example.swlee.webapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240083360613-a2c6m9i33nsv4c507bafe3m7h0s1lvdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.swlee.webapp",
+            "certificate_hash": "b7659c802dfb67e87b1ae19111709644caead8ae"
+          }
+        },
+        {
+          "client_id": "240083360613-5k30p6ead6sg5i2ihdj9vhlik385cdvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSGX2UUI63R3C3SQ1RXZzQF0L7N3zgw8I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240083360613-5k30p6ead6sg5i2ihdj9vhlik385cdvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
