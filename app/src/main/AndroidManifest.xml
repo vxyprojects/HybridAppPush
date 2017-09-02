@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".BroadcastD"></receiver>
         <service
             android:name="com.example.swlee.webapp.FirebaseMessagingService">
             <intent-filter>

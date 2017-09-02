@@ -1,6 +1,10 @@
 package com.example.swlee.webapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +28,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -38,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-
 //        WebSettings websettings = webViewMain.getSettings();
 //        WebSettings webSettings = webViewMain.getSettings();
 //        webSettings.setJavaScriptEnabled(true);
@@ -54,22 +57,18 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //
 //        webViewMain.loadUrl("http://m.dcinside.com/list.php?id=programming");
-
-
 // test
 //        setContentView(R.layout.activity_main);
 //        WebView WebView01 = (WebView) findViewById(R.id.webView01);
 //        WebView01.setWebViewClient(new WebViewClient());
-//
 //        WebSettings webSettings = WebView01.getSettings();
 //        webSettings.setJavaScriptEnabled(true);
-//
 //        WebView01.loadUrl("http://www.naver.com");
-//        System.out.println("1111");
-//        System.out.println("1111");
 //        FirebaseMessaging.getInstance().subscribeToTopic("notice");
 
         setContentView(R.layout.activity_main);
+        new AlarmExecute(getApplicationContext()).Alarm();
+
         Button btnShowToken = (Button)findViewById(R.id.button_show_token);
         Button btnCallRestApi = (Button)findViewById(R.id.call_rest_api);
         btnShowToken.setOnClickListener(new View.OnClickListener() {
@@ -98,20 +97,18 @@ public class MainActivity extends AppCompatActivity {
         private String url;
         private ContentValues values;
 
-        public NetworkTask(String url, ContentValues values) {
-
+        public NetworkTask(String url, ContentValues values)
+        {
             this.url = url;
             this.values = values;
-//            Log.d(Tag,"tocken is " +"NetworkTask consturctor");
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-
+        protected String doInBackground(Void... params)
+        {
             String result = null; // 요청 결과를 저장할 변수.
 //            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
 //            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
-
             RequestHttpURLGet requestHttpURLConnection = new RequestHttpURLGet();
             try {
                 result = requestHttpURLConnection.getExam(); // 해당 URL로 부터 결과물을 얻어온다.
@@ -122,12 +119,41 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String s)
+        {
             super.onPostExecute(s);
 
             Log.d(Tag,"result2 is " +s);
             TextView return_view = (TextView)findViewById(R.id.return_view);
             return_view.setText(s);
         }
+    }
+
+
+
+    //push - 특정 시간에  보내지게끔 해주는 클래스
+    public class AlarmExecute {
+
+        // tag
+        private static final String Tag  = "AlarmExecute";
+        private Context context;
+        public AlarmExecute(Context context) {
+            this.context=context;
+        }
+        public void Alarm() {
+            AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(MainActivity.this, BroadcastD.class);
+
+            PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
+            Calendar calendar = Calendar.getInstance();
+            //알람시간 calendar에 set해주기
+
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 04, 57, 0);
+
+            //알람 예약
+            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        }
+
     }
 }
