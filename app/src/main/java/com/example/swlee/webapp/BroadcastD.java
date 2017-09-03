@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 public class BroadcastD  extends BroadcastReceiver {
 
@@ -28,9 +29,19 @@ public class BroadcastD  extends BroadcastReceiver {
         // todo  10분 마다  콜  -- 결국엔  call api 를  10분 마다  하고선  call 한부분에서 noti를 하냐 안하냐  처리
         MainActivity.NetworkTask networkTask = new MainActivity.NetworkTask("http://172.30.1.11:3000/get/cal_data", null);
         // 이부분은  어싱크로 되면 안될듯 하다  싱크가 되서  처리 하고 나서  여기로 내려와야 할듯 하다
-        networkTask.execute();
-        this.call_api_data = networkTask.getData();
+        //        networkTask.execute();
+        //        this.call_api_data = networkTask.getData();
+        try {
+            //.execute()에 파라미터도  넘길수 있는듯
+            this.call_api_data = networkTask.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         Log.d("alarm_side","call_api_data is " +this.call_api_data);
+
+        // todo  call_api_data 검사 해서 noti를 해줄지 안해줄지  결정 해준다
         NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         Notification.Builder builder = new Notification.Builder(context);

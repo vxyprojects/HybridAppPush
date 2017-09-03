@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d("tag","ttt");
                 result = requestHttpURLConnection.getExam(); // 해당 URL로 부터 결과물을 얻어온다.
                 Log.d("result",result);
-                this.returnData = result;
+//                this.returnData = result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -129,10 +129,13 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s)
         {
             super.onPostExecute(s);
+
+            this.returnData = s;
 //            this.returnData = s;
 //            TextView return_view = (TextView)findViewById(R.id.return_view);
 //            return_view.setText(s);
         }
+
 
         public String getData() {
 
@@ -160,22 +163,10 @@ public class MainActivity extends AppCompatActivity {
             PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
             Calendar calendar = Calendar.getInstance();
             //알람시간 calendar에 set해주기
-//            // todo  10분 마다  콜  -- 결국엔  call api 를  10분 마다  하고선  call 한부분에서 noti를 하냐 안하냐  처리 --- 이건 시작하자 마자 10분한번 실행하겠구나
-//            calendar.add(Calendar.MINUTE, 10);
-//            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), 0);
-            //알람 예약
-//            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-//            am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() ,
-//                    10 * 60 * 1000,, sender);
-            //10 분  마다  돌아가게끔  처리  -- 테스트
-//            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                    10 * 60 * 1000,, sender);
-
+            // todo  10분 마다  콜  -- 결국엔  call api 를  10분 마다  하고선  call 한부분에서 noti를 하냐 안하냐  처리 --- 이건 시작하자 마자 10분한번 실행하겠구나
             // 1분 마다  돌아가게끔 처리
             am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     1 * 60 * 1000, sender);
-
-
 
         }
 
