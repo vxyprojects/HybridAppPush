@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         btnCallRestApi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("tag","ffff");
                 // AsyncTask를 통해 HttpURLConnection 수행.
                 NetworkTask networkTask = new NetworkTask("http://172.30.1.14:3000/get/cal_data", null);
                 networkTask.execute();
@@ -92,10 +95,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public class NetworkTask extends AsyncTask<Void, Void, String> {
+    public static class NetworkTask extends AsyncTask<Void, Void, String> {
 
         private String url;
         private ContentValues values;
+        private String returnData;
 
         public NetworkTask(String url, ContentValues values)
         {
@@ -111,7 +115,10 @@ public class MainActivity extends AppCompatActivity {
 //            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
             RequestHttpURLGet requestHttpURLConnection = new RequestHttpURLGet();
             try {
+//                Log.d("tag","ttt");
                 result = requestHttpURLConnection.getExam(); // 해당 URL로 부터 결과물을 얻어온다.
+                Log.d("result",result);
+                this.returnData = result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -122,10 +129,14 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s)
         {
             super.onPostExecute(s);
+//            this.returnData = s;
+//            TextView return_view = (TextView)findViewById(R.id.return_view);
+//            return_view.setText(s);
+        }
 
-            Log.d(Tag,"result2 is " +s);
-            TextView return_view = (TextView)findViewById(R.id.return_view);
-            return_view.setText(s);
+        public String getData() {
+
+            return this.returnData;
         }
     }
 
@@ -137,22 +148,35 @@ public class MainActivity extends AppCompatActivity {
         // tag
         private static final String Tag  = "AlarmExecute";
         private Context context;
+        private String call_api_data;
         public AlarmExecute(Context context) {
             this.context=context;
         }
         public void Alarm() {
             AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+            Log.d(Tag,"testsss");
             Intent intent = new Intent(MainActivity.this, BroadcastD.class);
-
             PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-
             Calendar calendar = Calendar.getInstance();
             //알람시간 calendar에 set해주기
-
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 04, 57, 0);
-
+//            // todo  10분 마다  콜  -- 결국엔  call api 를  10분 마다  하고선  call 한부분에서 noti를 하냐 안하냐  처리 --- 이건 시작하자 마자 10분한번 실행하겠구나
+//            calendar.add(Calendar.MINUTE, 10);
+//            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), 0);
             //알람 예약
-            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+//            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+//            am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() ,
+//                    10 * 60 * 1000,, sender);
+            //10 분  마다  돌아가게끔  처리  -- 테스트
+//            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                    10 * 60 * 1000,, sender);
+
+            // 1분 마다  돌아가게끔 처리
+            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    1 * 60 * 1000, sender);
+
+
+
         }
 
     }

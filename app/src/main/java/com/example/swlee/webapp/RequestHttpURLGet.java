@@ -32,11 +32,12 @@ public class RequestHttpURLGet {
 
     public String getExam() throws IOException {
 
-        //        http://172.30.1.27:3000/get/cal_data
-        //http://172.30.1.27:3000/get/cal_data
-        URL url = new URL("http://172.30.1.27:3000/get/cal_data");
+//        URL url = new URL("http://172.30.1.27:3000/get/cal_data");
+        URL url = new URL("http://172.30.1.11:3000/get/cal_data");
 
         // 문자열로 URL 표현
+        System.out.println("get exam start" + url.toExternalForm());
+
         System.out.println("URL :" + url.toExternalForm());
 
         // HTTP Connection 구하기
@@ -49,11 +50,9 @@ public class RequestHttpURLGet {
             conn.setConnectTimeout(3000); // 3초
             // 읽기 타임아웃 설정
             conn.setReadTimeout(3000); // 3초
-
             // 이두줄때문에 안되네  이유가  머지 -- 현재는 안사용 하는듯
-//            conn.setDoInput(true);
-//            conn.setDoOutput(true);
-
+            //            conn.setDoInput(true);
+            //            conn.setDoOutput(true);
             // 요청 방식 구하기
             System.out.println("getRequestMethod():" + conn.getRequestMethod());
             // 응답 콘텐츠 유형 구하기
@@ -66,9 +65,6 @@ public class RequestHttpURLGet {
             e.printStackTrace();
         }
 
-
-
-
         // 응답 헤더의 정보를 모두 출력
         for (Map.Entry<String, List<String>> header : conn.getHeaderFields().entrySet()) {
             for (String value : header.getValue()) {
@@ -76,7 +72,7 @@ public class RequestHttpURLGet {
             }
         }
 
-//        //연결 된경우
+        //연결 된경우
         if (conn.getResponseCode()== HttpURLConnection.HTTP_OK) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = null;
@@ -95,7 +91,7 @@ public class RequestHttpURLGet {
 
         // 접속 해제
         conn.disconnect();
-
+        System.out.println("get exam end" + url.toExternalForm());
         return output.toString();
     }
 
