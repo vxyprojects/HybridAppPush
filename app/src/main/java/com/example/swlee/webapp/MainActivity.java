@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Log.d("tag","ffff");
+//                Log.d("tag","ffff");
                 // AsyncTask를 통해 HttpURLConnection 수행.
                 NetworkTask networkTask = new NetworkTask("http://172.30.1.14:3000/get/cal_data", null);
                 networkTask.execute();
@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
         private String url;
         private ContentValues values;
-        private String returnData;
 
         public NetworkTask(String url, ContentValues values)
         {
@@ -111,14 +110,9 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Void... params)
         {
             String result = null; // 요청 결과를 저장할 변수.
-//            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-//            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
-            RequestHttpURLGet requestHttpURLConnection = new RequestHttpURLGet();
             try {
-//                Log.d("tag","ttt");
-                result = requestHttpURLConnection.getExam(); // 해당 URL로 부터 결과물을 얻어온다.
-                Log.d("result",result);
-//                this.returnData = result;
+                RequestHttpURLGet requestHttpURLConnection = new RequestHttpURLGet();
+                result = requestHttpURLConnection.getExam(this.url); // 해당 URL로 부터 결과물을 얻어온다.
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -129,17 +123,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s)
         {
             super.onPostExecute(s);
-
-            this.returnData = s;
-//            this.returnData = s;
+            //todo execute after use return data for front
 //            TextView return_view = (TextView)findViewById(R.id.return_view);
 //            return_view.setText(s);
-        }
-
-
-        public String getData() {
-
-            return this.returnData;
         }
     }
 

@@ -30,11 +30,9 @@ public class RequestHttpURLGet {
     private StringBuilder output = new StringBuilder();
 
 
-    public String getExam() throws IOException {
+    public String getExam(String param_url) throws IOException {
 
-//        URL url = new URL("http://172.30.1.27:3000/get/cal_data");
-        URL url = new URL("http://172.30.1.11:3000/get/cal_data");
-
+        URL url = new URL(param_url);
         // 문자열로 URL 표현
         System.out.println("get exam start" + url.toExternalForm());
 
