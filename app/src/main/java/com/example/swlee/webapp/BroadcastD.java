@@ -13,11 +13,14 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import java.sql.Array;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class BroadcastD  extends BroadcastReceiver {
@@ -30,13 +33,18 @@ public class BroadcastD  extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {//알람 시간이 되었을때 onReceive를 호출함
 
         //현재 날짜
-        String current_date =this.getCurrentData();
+//        String current_date =this.getCurrentData();
+        String current_time =this.getCurrentTime();
+        Log.d("current_time","currenttime12" +current_time);
+
+
         //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
         // AsyncTask를 통해 HttpURLConnection 수행.
         // todo  10분 마다  콜  -- 결국엔  call api 를  10분 마다  하고선  call 한부분에서 noti를 하냐 안하냐  처리
         //todo 현재 날짜 파라미터를  던져서  쿼리를  오늘 날짜의 일정데이타만  받아온다
-//        String makeUrl  = "http://172.30.1.11:3000/get/cal_data?current_date=2017-5-12";
-        String makeUrl  = "http://172.30.1.11:3000/get/cal_data?current_date="+ current_date;
+        //todo  id가  넘어가야 한다 .\
+        String makeUrl  = "http://ec2-52-79-166-70.ap-northeast-2.compute.amazonaws.com:3000/get/cal_data?current_time="+ current_time;
+
         MainActivity.NetworkTask networkTask = new MainActivity.NetworkTask(makeUrl, null);
         // 이부분은  어싱크로 되면 안될듯 하다  싱크가 되서  처리 하고 나서  여기로 내려와야 할듯 하다
         try {
@@ -84,6 +92,47 @@ public class BroadcastD  extends BroadcastReceiver {
         Log.d("currentdate","currentdate is " +makeUrl);
         return makeUrl;
 //        return "";
+    }
+
+
+    /**
+     * 현재 시간 구해주는 함수
+     * @return
+     */
+    private String getCurrentTime(){
+
+        Calendar cal = Calendar.getInstance();
+        //        0:오전, 1:오후
+        String sAmPm = String.valueOf(cal.get(Calendar.AM_PM));
+        String sReplaceAmPm = "";
+//        String sHour = String.valueOf(cal.get(Calendar.HOUR));
+        String sHour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        String sMinuite = String.valueOf(cal.get(Calendar.MINUTE));
+        String sSecond = String.valueOf(cal.get(Calendar.SECOND));
+        HashMap<String, String> map = new HashMap();
+        map.put("0", "오전");
+        map.put("1", "오후");
+
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (sAmPm == entry.getKey()) {
+                sReplaceAmPm =  entry.getValue();
+            }
+        }
+
+
+//        Log.d("sReplaceAmPm","sReplaceAmPm is " +sReplaceAmPm);
+//        Log.d("currentdate","sAmPm is " +sAmPm);
+//        Log.d("currentdate","sHour is " +sHour);
+//        Log.d("currentdate","sMinuite is " +sMinuite);
+//        String return_value = sReplaceAmPm + " " + sHour +":"+ sMinuite;
+        //todo minute 가 09가 아닌  9 로 나온다 .  그런데  문제는 안된다  30분 00 시 단위로만  확인 하면되기때문이다
+        String return_value = sHour +":"+ sMinuite;
+
+        // todo 30분 단위로 특정시간 00분 30분 에 크론 돌리는 방법 알아내야한다 -- 왜 15분이지? 10분인거 같기도함 이부분은 확인 받아야한다 이상하게 실행되네 이것 확인해야함 
+        Log.d("currentdate","return_value is " +return_value);
+        return return_value;
+
     }
 
 }

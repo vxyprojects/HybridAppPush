@@ -29,7 +29,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -150,9 +153,27 @@ public class MainActivity extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             //알람시간 calendar에 set해주기
             // todo  10분 마다  콜  -- 결국엔  call api 를  10분 마다  하고선  call 한부분에서 noti를 하냐 안하냐  처리 --- 이건 시작하자 마자 10분한번 실행하겠구나
+
+
+
+
             // 1분 마다  돌아가게끔 처리
             am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    1 * 60 * 1000, sender);
+                    10 * 60 * 1000, sender);
+
+
+//            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                    1 * 60 * 1000, sender);
+            // 내일 아침 8시 10분에 처음 시작해서, 24시간 마다 실행되게
+            //            Date tomorrow = null;
+            //            try {
+            //                tomorrow = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2012-02-25 08:10:00");
+            //            } catch (ParseException e) {
+            //                e.printStackTrace();
+            //            }
+            //            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+            //            am.setInexactRepeating(AlarmManager.RTC, tomorrow.getTime(), 24 * 60 * 60 * 1000, sender);
+
 
         }
 
